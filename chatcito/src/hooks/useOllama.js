@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-const OLLAMA_URL = 'http://localhost:11434/api/generate'
-const MODEL = 'deepseek-r1:1.5b'
+const API_URL = 'http://localhost:3000/api/chat'
 
 export function useOllama() {
   const [isLoading, setIsLoading] = useState(false)
@@ -12,20 +11,16 @@ export function useOllama() {
     setError(null)
 
     try {
-      const response = await fetch(OLLAMA_URL, {
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: MODEL,
-          prompt,
-          stream: false,
-        }),
+        body: JSON.stringify({ prompt }),
       })
 
-      if (!response.ok) throw new Error('Error al conectar con Ollama')
+      if (!response.ok) throw new Error('Error al conectar con el servidor')
 
       const data = await response.json()
-      return data.response
+      return data.respuesta
     } catch (err) {
       setError(err.message)
       return null
